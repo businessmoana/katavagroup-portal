@@ -97,21 +97,21 @@ const Order = ({
         </div>
       ),
     },
-    {
-      title: "Delivery charge",
-      className: 'cursor-pointer',
-      dataIndex: 'sum_price',
-      key: 'sum_price',
-      align: 'center' as AlignType,
-      width: 180,
-      render: (sum_price: any) => (
-        <div className="flex items-center font-medium justify-center">
-          <span className="truncate text-center">
-            $ {sum_price}
-          </span>
-        </div>
-      ),
-    },
+    // {
+    //   title: "Delivery charge",
+    //   className: 'cursor-pointer',
+    //   dataIndex: 'sum_price',
+    //   key: 'sum_price',
+    //   align: 'center' as AlignType,
+    //   width: 180,
+    //   render: (sum_price: any) => (
+    //     <div className="flex items-center font-medium justify-center">
+    //       <span className="truncate text-center">
+    //         $ {sum_price}
+    //       </span>
+    //     </div>
+    //   ),
+    // },
     {
       title: "Sum price",
       className: 'cursor-pointer',
