@@ -9,17 +9,14 @@ type IProps = {
   orderItems: any[] | undefined;
 };
 
-const OrderItems = ({
-  orderItems
-}: IProps) => {
+const OrderItems = ({ orderItems }: IProps) => {
   const router = useRouter();
   const { t } = useTranslation();
   const { alignLeft, alignRight } = useIsRTL();
 
-
   let columns = [
     {
-      title: "Item number",
+      title: 'Item #',
       dataIndex: 'item_number',
       key: 'item_number',
       align: alignLeft as AlignType,
@@ -28,7 +25,7 @@ const OrderItems = ({
     },
 
     {
-      title: "Item name",
+      title: 'Item name',
       className: 'cursor-pointer',
       dataIndex: 'item_name',
       key: 'item_name',
@@ -37,7 +34,7 @@ const OrderItems = ({
     },
 
     {
-      title: "Item brand",
+      title: 'Item brand',
       className: 'cursor-pointer',
       dataIndex: 'item_brand',
       key: 'item_brand',
@@ -46,7 +43,7 @@ const OrderItems = ({
     },
 
     {
-      title: "Package",
+      title: 'Package',
       className: 'cursor-pointer',
       dataIndex: 'package',
       key: 'package',
@@ -54,7 +51,7 @@ const OrderItems = ({
       width: 180,
     },
     {
-      title: "Ordered qty",
+      title: 'Ordered qty',
       className: 'cursor-pointer',
       dataIndex: 'order_kol',
       key: 'order_kol',
@@ -62,7 +59,7 @@ const OrderItems = ({
       width: 180,
     },
     {
-      title: "Get qty",
+      title: 'Get qty',
       className: 'cursor-pointer',
       dataIndex: 'get_kol',
       key: 'get_kol',
@@ -70,33 +67,46 @@ const OrderItems = ({
       width: 180,
     },
     {
-      title: "Item price",
+      title: 'Item price',
       className: 'cursor-pointer',
       dataIndex: 'price',
       key: 'price',
       align: 'center' as AlignType,
       width: 180,
       render: (price: any) => (
-        <div className="flex items-center font-medium justify-center">
-          <span className="truncate text-center">
-            $ {price}
+        <div className="flex items-center font-medium justify-end">
+          <span className="truncate text-end">
+            ${' '}
+            {price.toLocaleString('en-US', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
           </span>
         </div>
       ),
     },
     {
-      title: "Sum price",
+      title: 'Sum price',
       className: 'cursor-pointer',
       dataIndex: 'price',
       key: 'price',
       align: 'center' as AlignType,
       width: 180,
-      render: function Render(price:any, record: any) {
-        return <div className="flex items-center font-medium justify-center">
-           <span className="truncate text-center">
-             $ {(Number(record.get_kol) * Number(record.price)).toFixed(2)}
-           </span>
-         </div>
+      render: function Render(price: any, record: any) {
+        return (
+          <div className="flex items-center font-medium justify-end">
+            <span className="truncate text-end">
+              ${' '}
+              {(Number(record.get_kol) * Number(record.price)).toLocaleString(
+                'en-US',
+                {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                },
+              )}
+            </span>
+          </div>
+        );
       },
     },
   ];
@@ -117,7 +127,7 @@ const OrderItems = ({
           )}
           data={orderItems}
           rowKey="id"
-          scroll={{ x: 1000 }}
+          scroll={{ x: 10 }}
         />
       </div>
     </>

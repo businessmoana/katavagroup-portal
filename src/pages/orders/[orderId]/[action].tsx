@@ -41,8 +41,9 @@ export default function UpdateOrdersPage() {
   if (error) return <ErrorMessage message={error.message} />;
   return (
     <>
-      <div className="flex pb-5 border-b border-dashed border-border-base md:pb-7">
+      <div className="flex pb-5 border-b border-dashed border-border-base md:pb-7 items-center gap-5">
         <h1 className="text-lg font-semibold text-heading">Order review</h1>
+        <Button onClick={print}>Print</Button>
       </div>
       <Order order={order} />
       {categorizedData

@@ -23,7 +23,6 @@ export default function PrintChefStatement({ invoice }: { invoice: any }) {
     invoice.otherDetail?.map((otherItem: any) => {
       if (otherItem.amount) total += parseFloat(otherItem.amount);
     });
-    console.log(total);
     const styles = `
     <style>
       * {
@@ -183,9 +182,11 @@ export default function PrintChefStatement({ invoice }: { invoice: any }) {
                       <td align="right" style="border-right: 1px solid #000; font-weight: bolder;padding-right:5px;">${
                         text.txt_date
                       }</td>
-                      <td style="padding-left:4px">${invoice.salesDetail
-                        ?.approved_date?invoice.salesDetail
-                        ?.approved_date:""}</td>
+                      <td style="padding-left:4px">${
+                        invoice.salesDetail?.approved_date
+                          ? invoice.salesDetail?.approved_date
+                          : ''
+                      }</td>
                     </tr>
                     <tr>
                       <td style="border-right: 1px solid #000; font-weight: bolder;">&nbsp;</td>
@@ -231,10 +232,10 @@ export default function PrintChefStatement({ invoice }: { invoice: any }) {
         <table id="table_list" cellspacing="0" cellpadding="2">
           <tbody>
             <tr class="tr_background">
-              <th width="64%">${text.txt_description}</th>
-              <th width="12%">${text.txt_sales}</th>
-              <th width="12%">${text.txt_commission}</th>
-              <th width="12%">${text.txt_amount}</th>
+              <th width="70%">${text.txt_description}</th>
+              <th width="10%">${text.txt_sales}</th>
+              <th width="10%">${text.txt_commission}</th>
+              <th width="10%">${text.txt_amount}</th>
             </tr>
             ${invoice.salesDetail?.salesItems
               ?.map(
@@ -243,20 +244,46 @@ export default function PrintChefStatement({ invoice }: { invoice: any }) {
                 <td>
                   <table class="table_description" cellspacing="0" cellpadding="0" style="width:100%">
                     <tr style="display:flex; justify-content: space-between;width:100%">
-                      <td style="border:none">${salesItem.description?salesItem.description:""}</td>
+                      <td style="border:none">${
+                        salesItem.description ? salesItem.description : ''
+                      }</td>
                       <td align="right" style="border:none;">${
-                        salesItem.start_date_item?salesItem.start_date_item:''
-                      }&nbsp;&nbsp;&nbsp;${salesItem.end_date_item?salesItem.end_date_item:''}</td>
+                        salesItem.start_date_item
+                          ? salesItem.start_date_item
+                          : ''
+                      }&nbsp;&nbsp;&nbsp;${
+                        salesItem.end_date_item ? salesItem.end_date_item : ''
+                      }</td>
                     </tr>
                   </table>
                 </td>
-                <td align="center">$${parseFloat(salesItem.sales?salesItem.sales:0).toFixed(
-                  2,
-                )}</td>
-                <td align="center">${salesItem.commission?salesItem.commission:0}%</td>
-                <td align="center">$${parseFloat(salesItem.amount?salesItem.amount:0).toFixed(
-                  2,
-                )}</td>
+                <td align="center">
+                  <div style="display:flex;justify-content:space-between;">
+                    <div>$</div>
+                    <div style="align-items:end;text-align:end;padding-right:0;">${parseFloat(
+                      salesItem.sales ? salesItem.sales : 0,
+                    ).toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                    </div>
+                  </div>
+                </td>
+                <td align="center">${
+                  salesItem.commission ? salesItem.commission : 0
+                }%</td>
+                <td align="center">
+                  <div style="display:flex;justify-content:space-between;">
+                    <div>$</div>
+                    <div style="align-items:end;text-align:end;padding-right:0;">${parseFloat(
+                      salesItem.amount ? salesItem.amount : 0,
+                    ).toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                    </div>
+                  </div>
+                </td>
               </tr>
             `,
               )
@@ -275,13 +302,31 @@ export default function PrintChefStatement({ invoice }: { invoice: any }) {
                     </tr>
                   </table>
                 </td>
-                <td align="center">-$${parseFloat(
-                  invoice.orderDetail?.sales,
-                ).toFixed(2)}</td>
+                <td align="center">
+                  <div style="display:flex;justify-content:space-between;">
+                    <div>-$</div>
+                    <div style="align-items:end;text-align:end;padding-right:0;">${parseFloat(
+                      invoice.orderDetail?.sales,
+                    ).toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                    </div>
+                  </div>
+                </td>
                 <td align="center">${invoice.orderDetail?.commission}%</td>
-                <td align="center">-$${parseFloat(
-                  invoice.orderDetail?.sales,
-                ).toFixed(2)}</td>
+                <td align="center">
+                  <div style="display:flex;justify-content:space-between;">
+                    <div>-$</div>
+                    <div style="align-items:end;text-align:end;padding-right:0;">${parseFloat(
+                      invoice.orderDetail?.sales,
+                    ).toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                    </div>
+                  </div>
+                </td>
               </tr>
             `
                   : ''
@@ -300,11 +345,29 @@ export default function PrintChefStatement({ invoice }: { invoice: any }) {
                   </tr>
                 </table>
               </td>
-              <td align="center">$${parseFloat(otherItem.sales).toFixed(2)}</td>
+              <td align="center">
+                <div style="display:flex;justify-content:space-between;">
+                  <div>$</div>
+                  <div style="align-items:end;text-align:end;padding-right:0;">${parseFloat(
+                    otherItem.sales,
+                  ).toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}</div>
+                </div>
+              </td>
               <td align="center">${otherItem.commission}%</td>
-              <td align="center">$${parseFloat(otherItem.amount).toFixed(
-                2,
-              )}</td>
+              <td align="center">
+                <div style="display:flex;justify-content:space-between;">
+                    <div>$</div>
+                    <div style="align-items:end;text-align:end;padding-right:0;">${parseFloat(
+                      otherItem.amount,
+                    ).toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}</div>
+                  </div>
+              </td>
             </tr>
           `,
               )
@@ -312,7 +375,20 @@ export default function PrintChefStatement({ invoice }: { invoice: any }) {
              <tr>
               <td colspan="2" style="border:none"></td>
               <td align="center"><b>${text.txt_total}</b></td>
-              <td align="center"><b>$${total}</b></td>
+              <td align="center">
+                <b>
+                  <div style="display:flex;justify-content:space-between;">
+                    <div>$</div>
+                    <div style="align-items:end;text-align:end;padding-right:0;">${total.toLocaleString(
+                      'en-US',
+                      {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      },
+                    )}</div>
+                  </div>
+                </b>
+              </td>
             </tr>
           </tbody>
         </table>

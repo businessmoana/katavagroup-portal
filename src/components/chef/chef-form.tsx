@@ -146,7 +146,6 @@ export default function ChefCreateOrUpdateForm({ initialValues }: IProps) {
       passwordConfirmation: values.passwordConfirmation,
       note: values.note,
     };
-    console.log('initialValues=>', initialValues);
     try {
       if (!initialValues) {
         createChef({

@@ -13,21 +13,37 @@ import { useRouter } from 'next/router';
 import { useSettingsQuery } from '@/data/settings';
 import StatementList from '@/components/statement/list';
 import { useStatementsQuery } from '@/data/statements';
+import Select from '@/components/ui/select/select';
 
+const limitOptions = [
+  {
+    value: 10,
+  },
+  {
+    value: 25,
+  },
+  {
+    value: 50,
+  },
+  {
+    value: 100,
+  },
+];
 
 export default function AllStatementPage() {
   const { t } = useTranslation();
   const { locale } = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
+  const [limit, setLimit] = useState<any>(limitOptions[0]);
   const [page, setPage] = useState(1);
   const [orderBy, setOrder] = useState('');
   const [sortedBy, setColumn] = useState<SortOrder>(SortOrder.Desc);
   const { statemensts, paginatorInfo, loading, error } = useStatementsQuery({
     search: searchTerm,
-    limit: 10,
+    limit: limit.value,
     page,
     orderBy,
-    sortedBy
+    sortedBy,
   });
 
   const { settings, loading: loadingSettings } = useSettingsQuery({
@@ -44,11 +60,22 @@ export default function AllStatementPage() {
   function handlePagination(current: any) {
     setPage(current);
   }
+
+  function handleLimit(current: any) {
+    setLimit(current);
+  }
   return (
     <>
       <Card className="mb-8 flex flex-col items-center justify-between md:flex-row">
-        <div className="mb-4 md:mb-0 md:w-1/4">
+        <div className="mb-4 md:mb-0 md:w-1/4 flex justify-center items-center gap-5">
           <PageHeading title={'Statements'} />
+          <Select
+            options={limitOptions}
+            getOptionLabel={(option: any) => option.value}
+            getOptionValue={(option: any) => option.value}
+            onChange={handleLimit}
+            value={limit}
+          ></Select>
         </div>
         <div className="flex w-full flex-col items-center ms-auto md:w-1/2 md:flex-row">
           {/* <Search

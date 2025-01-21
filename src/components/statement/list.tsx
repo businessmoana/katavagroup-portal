@@ -13,16 +13,9 @@ import ActionButtons from '../common/action-buttons';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import Button from '../ui/button';
+import Select from '../ui/select/select';
 
-type IProps = {
-  statements: any[] | undefined;
-  paginatorInfo: MappedPaginatorInfo | null;
-  onPagination: (current: number) => void;
-  onSort: (current: any) => void;
-  onOrder: (current: string) => void;
-  isMultiCommissionRate?: boolean;
-  isAdmin?: boolean;
-};
+
 
 const StatementList = ({
   statements,
@@ -32,7 +25,7 @@ const StatementList = ({
   onOrder,
   isAdmin,
   isMultiCommissionRate,
-}: IProps) => {
+}: any) => {
   const router = useRouter();
   const { t } = useTranslation();
   const { alignLeft, alignRight } = useIsRTL();
@@ -76,7 +69,7 @@ const StatementList = ({
       dataIndex: 'sales_id',
       key: 'sales_id',
       align: alignLeft as AlignType,
-      width: 130,
+      width: 100,
       className: 'cursor-pointer',
       onHeaderCell: () => onHeaderClick('sales_id'),
     },
@@ -134,7 +127,7 @@ const StatementList = ({
       dataIndex: 'start_date',
       key: 'start_date',
       align: 'center' as AlignType,
-      width: 180,
+      width: 150,
       onHeaderCell: () => onHeaderClick('start_date'),
       render: (start_date: any) => (
         <div className="flex items-center font-medium">
@@ -159,7 +152,7 @@ const StatementList = ({
       dataIndex: 'end_date',
       key: 'end_date',
       align: 'center' as AlignType,
-      width: 180,
+      width: 150,
       onHeaderCell: () => onHeaderClick('end_date'),
       render: (end_date: any) => (
         <div className="flex items-center font-medium">
@@ -175,12 +168,12 @@ const StatementList = ({
       dataIndex: 'sales_id',
       key: 'Actions',
       align: 'center' as AlignType,
-      width: 180,
+      width: 150,
       render: (id: string) => {
         return (
           <a
             href={`/print/print-chef-statement/${id}`}
-            className="w-full h-12 md:w-auto md:ms-6"
+            className="w-full h-12 md:w-auto md:ms-6 flex justify-center items-center"
             target="_blank"
           >
             <Button>Statement</Button>
@@ -206,12 +199,12 @@ const StatementList = ({
           )}
           data={statements}
           rowKey="id"
-          scroll={{ x: 1000 }}
+          scroll={{ x: 10 }}
         />
       </div>
 
       {!!paginatorInfo?.total && (
-        <div className="flex items-center justify-end">
+        <div className="flex items-center justify-end gap-4">
           <Pagination
             total={paginatorInfo.total}
             current={paginatorInfo.currentPage}

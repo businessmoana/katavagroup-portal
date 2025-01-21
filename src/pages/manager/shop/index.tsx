@@ -37,7 +37,7 @@ export default function ManagerShopPage() {
     setVisible((v) => !v);
   };
   const { products, paginatorInfo, loading, error } = useProductsQuery({
-    limit: 10,
+    limit: 20,
     page,
     search: searchTerm,
   });
@@ -105,7 +105,7 @@ export default function ManagerShopPage() {
 
       {/* <Card> */}
       <div className="flex space-x-5">
-        <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-4 3xl:grid-cols-6">
+        <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
           {products?.map((product: Product) => (
             <ProductCard key={product.id} item={product} />
           ))}

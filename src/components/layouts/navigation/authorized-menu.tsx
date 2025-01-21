@@ -38,7 +38,7 @@ export default function AuthorizedMenu() {
             {data?.userName}
           </span>
           <span className="w-full truncate text-xs capitalize text-gray-400">
-            Manager
+            {data?.sifra != null ? 'Manager' : 'Admin'}
           </span>
         </div>
       </Menu.Button>

@@ -75,33 +75,30 @@ export const useUpdateCategoryMutation = () => {
   });
 };
 
-export const useCategoryQuery = ({ slug, language }: GetParams) => {
-  const { data, error, isLoading } = useQuery<Category, Error>(
-    [API_ENDPOINTS.CATEGORIES, { slug, language }],
-    () => categoryClient.get({ slug, language })
-  );
+export const useCategoriesQuery = () => {
+  // const { data, error, isLoading } = useQuery<CategoryPaginator, Error>(
+  //   [API_ENDPOINTS.CATEGORIES],
+  //   ({ queryKey, pageParam }) =>
+  //     categoryClient.get(),
+  //   {
+  //     keepPreviousData: true,
+  //   }
+  // );
 
-  return {
-    category: data,
-    error,
-    isLoading,
-  };
-};
-
-export const useCategoriesQuery = (options: Partial<CategoryQueryOptions>) => {
-  const { data, error, isLoading } = useQuery<CategoryPaginator, Error>(
-    [API_ENDPOINTS.CATEGORIES, options],
-    ({ queryKey, pageParam }) =>
-      categoryClient.paginated(Object.assign({}, queryKey[1], pageParam)),
-    {
-      keepPreviousData: true,
-    }
-  );
-
-  return {
-    categories: data?.data ?? [],
-    paginatorInfo: mapPaginatorData(data),
-    error,
-    loading: isLoading,
-  };
+  // return {
+  //   categories: data?.data ?? [],
+  //   paginatorInfo: mapPaginatorData(data),
+  //   error,
+  //   loading: isLoading,
+  // };
+  const { data, error, isLoading } = useQuery<any>(
+      [API_ENDPOINTS.CATEGORIES],
+      () => categoryClient.get(),
+    );
+  
+    return {
+      categories: data,
+      error,
+      loading: isLoading,
+    };
 };

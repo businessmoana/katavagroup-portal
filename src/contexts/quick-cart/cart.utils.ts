@@ -33,7 +33,6 @@ export function removeItemOrQuantity(
   id: Item['id'],
   quantity: number
 ) {
-  console.log('here remove util');
   
   return items.reduce((acc: Item[], item) => {
     if (item.id === id) {

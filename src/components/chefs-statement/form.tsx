@@ -209,7 +209,6 @@ const UpdateOrCreateChefsStatementView = () => {
                     </div>
                     <button
                       onClick={() => {
-                        console.log(getValues()['saleOtherItems'][index]);
                         if (getValues()['saleOtherItems'][index].id) {
                           handleDeactiveSaleOtherItem(
                             getValues()['saleOtherItems'][index].id,

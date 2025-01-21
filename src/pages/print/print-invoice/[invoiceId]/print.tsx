@@ -5,13 +5,17 @@ export default function PrintInvoice({ invoice }: { invoice: any }) {
   const [pdfOutput, setPdfOutput] = useState('');
   const [generating, setGenerating] = useState(true);
 
+  const formatDateWithSpaces = (dateString: any) => {
+    return dateString.replace(/\//g, ' / ');
+  };
+
   const generatePDF = () => {
     const doc = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
       format: 'a4',
       putOnlyUsedFonts: true,
-      floatPrecision: 16, 
+      floatPrecision: 16,
     });
     const tempDiv = document.createElement('div');
     const styles = `
@@ -49,7 +53,6 @@ export default function PrintInvoice({ invoice }: { invoice: any }) {
 
       #table_list {
         width: 100%;
-        margin-top: 20px;
         font-size: 12px;
         border-collapse: collapse;
       }
@@ -115,98 +118,6 @@ export default function PrintInvoice({ invoice }: { invoice: any }) {
     tempDiv.innerHTML = `
       ${styles}
       <div style="width: 210mm; padding: 10mm; box-sizing: border-box;" class="exclude-tailwind">
-        <table id="table_header">
-          <tbody>
-            <tr>
-              <td width="50%" align="left">
-                <img src="${
-                  process.env.NEXT_PUBLIC_REST_API_ENDPOINT
-                }/media/logo_za_meni.png" alt="logo" style="width: 240px; height: auto;" />
-              </td>
-              <td width="50%" align="right" style="color: rgb(128,128,128);">
-                <span style="font-size: 20px; font-weight: 700;">${
-                  text.txt_customer_invoice_in
-                }</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <table id="table_info" cellspacing="0" cellpadding="0">
-          <tbody>
-            <tr>
-              <td>
-                <table cellspacing="0" cellpadding="2">
-                  <tbody>
-                    <tr><td>${text.txt_katava_naziv}</td></tr>
-                    <tr><td>${invoice.sushi.address}</td></tr>
-                    <tr><td>${invoice.sushi.place}</td></tr>
-                    <tr><td>${invoice.sushi.company_phone}</td></tr>
-                  </tbody>
-                </table>
-              </td>
-              <td align="right">
-                <table cellspacing="0" cellpadding="10">
-                  <tbody>
-                    <tr>
-                      <td style="border-right: 1px solid #000; font-weight: bolder;">${
-                        text.txt_invoice_date_in
-                      }</td>
-                      <td>${invoice.orderDetails?.invoice_date?invoice.orderDetails?.invoice_date:''}</td>
-                    </tr>
-                    <tr>
-                      <td style="border-right: 1px solid #000;"><b>${
-                        text.txt_invoice_number_u_in
-                      } #</b></td>
-                      <td>${invoice.orderDetails?.invoice_number}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <table id="table_info_1" cellspacing="0" cellpadding="0">
-          <tbody>
-            <tr>
-              <td width="50%">
-                <table cellspacing="0" cellpadding="2">
-                  <tbody>
-                    <tr><td><b>${text.txt_bill_to_in}:</b></td></tr>
-                    <tr><td>${invoice.orderDetails?.company_name}</td></tr>
-                    <tr><td>${invoice.orderDetails?.address}</td></tr>
-                    <tr><td>${invoice.orderDetails?.company_phone}</td></tr>
-                  </tbody>
-                </table>
-              </td>
-              <td width="50%">
-                <table cellspacing="0" cellpadding="2">
-                  <tbody>
-                    <tr><td><b>${text.txt_ship_to_in}:</b></td></tr>
-                    <tr><td>${invoice.orderDetails?.location_name}</td></tr>
-                    <tr><td>${invoice.orderDetails?.location_address}</td></tr>
-                    <tr><td>${text.txt_attn_in}: ${invoice.orderDetails
-                      ?.company_name}</td></tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <table id="table_info_2" cellspacing="0" cellpadding="2">
-          <tbody>
-            <tr>
-              <td width="50%"></td>
-              <td width="16%"><b>${text.txt_ordered_date_in}</b><br />${invoice
-                .orderDetails?.order_date}</td>
-              <td width="12%"><b>${text.txt_ship_date_in}</b><br />${invoice
-                .orderDetails?.ship_date}</td>
-              <td width="10%"></td>
-              <td width="12%"><b>${text.txt_terms_in}</b><br />${
-                text.txt_regular_in
-              }</td>
-            </tr>
-          </tbody>
-        </table>
         <table id="table_list" cellspacing="0" cellpadding="2">
           <tbody>
             <tr class="tr_background">
@@ -227,8 +138,29 @@ export default function PrintInvoice({ invoice }: { invoice: any }) {
                 <td>${orderItem.product.item_name}</td>
                 <td align="center">${orderItem.productItem.package}</td>
                 <td align="center">${orderItem.kolicina}</td>
-                <td>$${parseFloat(orderItem.price).toFixed(2)}</td>
-                <td>$${parseFloat(orderItem.extended_price).toFixed(2)}</td>
+                <td>
+                  <div style="display:flex;justify-content:space-between;">
+                    <div>$</div>
+                    <div style="align-items:end;text-align:end;padding-right:0;">${orderItem.price.toLocaleString(
+                      'en-US',
+                      {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      },
+                    )}</div>
+                  </div>
+                <td>
+                  <div style="display:flex;justify-content:space-between;">
+                    <div>$</div>
+                    <div style="align-items:end;text-align:end;padding-right:0;">${orderItem.extended_price.toLocaleString(
+                      'en-US',
+                      {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      },
+                    )}</div>
+                  </div>
+                </td>
               </tr>
             `,
               )
@@ -236,10 +168,21 @@ export default function PrintInvoice({ invoice }: { invoice: any }) {
             <tr class="tr_background">
               <td colspan="5"></td>
               <td align="center"><b>${text.txt_extended_amount_in}</b></td>
-              <td><b>$${invoice.orderDetails?.orderItems
-                .map((item: any) => parseFloat(item.extended_price))
-                .reduce((sum: any, a: any) => sum + a, 0)
-                .toFixed(2)}</b></td>
+              <td>
+                <b>
+                  <div style="display:flex;justify-content:space-between;">
+                    <div>$</div>
+                    <div style="align-items:end;text-align:end;padding-right:0;">${invoice.orderDetails?.orderItems
+                      .map((item: any) => parseFloat(item.extended_price))
+                      .reduce((sum: any, a: any) => sum + a, 0)
+                      .toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </div>
+                  </div>
+                </b>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -254,33 +197,91 @@ export default function PrintInvoice({ invoice }: { invoice: any }) {
                   <tbody>
                     <tr>
                       <td>${text.txt_subtotal_in}</td>
-                      <td>$${invoice.orderDetails?.orderItems
-                        .map((item: any) => parseFloat(item.extended_price))
-                        .reduce((sum: any, a: any) => sum + a, 0)
-                        .toFixed(2)}</td>
+                      <td>
+                        <div style="display:flex;justify-content:space-between;">
+                          <div>$</div>
+                          <div style="align-items:end;text-align:end;padding-right:0;">${invoice.orderDetails?.orderItems
+                            .map((item: any) => parseFloat(item.extended_price))
+                            .reduce((sum: any, a: any) => sum + a, 0)
+                            .toLocaleString('en-US', {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
+                          </div>
+                        </div>
+                      </td>
                     </tr>
                     <tr>
                       <td>${text.txt_shipping_in}</td>
-                      <td>$${invoice.orderDetails?.shipping}</td>
+                      <td>
+                        <div style="display:flex;justify-content:space-between;">
+                          <div>$</div>
+                          <div style="align-items:end;text-align:end;padding-right:0;">${invoice.orderDetails?.shipping.toLocaleString(
+                            'en-US',
+                            {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            },
+                          )}
+                          </div>
+                        </div>
+                      </td>
                     </tr>
                     <tr>
                       <td>${text.txt_pallet_cost_in}</td>
-                      <td>$${invoice.orderDetails?.pallet_cost}</td>
+                      <td>
+                        <div style="display:flex;justify-content:space-between;">
+                          <div>$</div>
+                          <div style="align-items:end;text-align:end;padding-right:0;">${invoice.orderDetails?.pallet_cost.toLocaleString(
+                            'en-US',
+                            {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            },
+                          )}
+                          </div>
+                        </div>
+                      </td>
                     </tr>
                     <tr>
                       <td>${text.txt_tax_in}</td>
-                      <td>$${invoice.orderDetails?.tax}</td>
+                      <td>
+                        <div style="display:flex;justify-content:space-between;">
+                          <div>$</div>
+                          <div style="align-items:end;text-align:end;padding-right:0;">${invoice.orderDetails?.tax.toLocaleString(
+                            'en-US',
+                            {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            },
+                          )}
+                          </div>
+                        </div>
+                      </td>
                     </tr>
                     <tr id="tr_background_footer">
                       <td><b>${text.txt_total_in}</b></td>
-                      <td><b>$${(
-                        invoice.orderDetails?.orderItems
-                          .map((item: any) => parseFloat(item.extended_price))
-                          .reduce((sum: any, a: any) => sum + a, 0) +
-                        parseFloat(invoice.orderDetails?.shipping) +
-                        parseFloat(invoice.orderDetails?.pallet_cost) +
-                        parseFloat(invoice.orderDetails?.tax)
-                      ).toFixed(2)}</b></td>
+                      <td>
+                        <b>
+                          <div style="display:flex;justify-content:space-between;">
+                            <div>$</div>
+                            <div style="align-items:end;text-align:end;padding-right:0;">${(
+                              invoice.orderDetails?.orderItems
+                                .map((item: any) =>
+                                  parseFloat(item.extended_price),
+                                )
+                                .reduce((sum: any, a: any) => sum + a, 0) +
+                              parseFloat(invoice.orderDetails?.shipping) +
+                              parseFloat(invoice.orderDetails?.pallet_cost) +
+                              parseFloat(invoice.orderDetails?.tax)
+                            ).toLocaleString('en-US', {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            })}
+                            </div>
+                          </div>
+                        </b>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -309,13 +310,225 @@ export default function PrintInvoice({ invoice }: { invoice: any }) {
           doc.setFontSize(10);
           doc.setFont('helvetica', 'bold');
           doc.setTextColor(0, 0, 0);
-          doc.text(footerText2, 100, pageHeight - footerHeight,{align:'center'});
+          doc.text(footerText2, 100, pageHeight - footerHeight, {
+            align: 'center',
+          });
 
           const footerText3 = `(${i})`;
           doc.setFontSize(10);
           doc.setFont('helvetica', 'normal');
           doc.setTextColor(0, 0, 0);
-          doc.text(footerText3, 200, pageHeight - footerHeight,{align:'center'});
+          doc.text(footerText3, 200, pageHeight - footerHeight, {
+            align: 'center',
+          });
+          // if (i > 1) {
+            const hearderText1 = `KATAVA GROUP`;
+            doc.setFontSize(20);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(0, 128, 0);
+            doc.text(hearderText1, 10, 20, {
+              align: 'left',
+            });
+
+            const hearderText2 = `${text.txt_katava_naziv}`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText2, 10, 28, {
+              align: 'left',
+            });
+
+            const hearderText3 = `${invoice.sushi.address}`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText3, 10, 35, {
+              align: 'left',
+            });
+
+            const hearderText4 = `${invoice.sushi.place}`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText4, 10, 42, {
+              align: 'left',
+            });
+
+            const hearderText5 = `${invoice.sushi.company_phone}`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText5, 10, 49, {
+              align: 'left',
+            });
+
+            const hearderText6 = `${text.txt_customer_invoice_in}`;
+            doc.setFontSize(15);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(128, 128, 128);
+            doc.text(hearderText6, 200, 20, {
+              align: 'right',
+            });
+
+            const hearderText7 = `${text.txt_invoice_date_in}`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText7, 150, 32, {
+              align: 'left',
+            });
+
+            const hearderText8 = `${text.txt_invoice_number_u_in} #`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText8, 150, 44, {
+              align: 'left',
+            });
+
+            const hearderText9 = `| ${
+              invoice.orderDetails?.invoice_date
+                ? invoice.orderDetails?.invoice_date
+                : ''
+            }`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText9, 172, 32, {
+              align: 'left',
+            });
+
+            const hearderText10 = `| ${invoice.orderDetails?.invoice_number}`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText10, 172, 44, {
+              align: 'left',
+            });
+
+            doc.setLineWidth(0.5);
+            doc.line(10, 53, 200, 53);
+
+            const hearderText11 = `${text.txt_bill_to_in}:`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText11, 10, 59, {
+              align: 'left',
+            });
+
+            const hearderText12 = `${invoice.orderDetails?.company_name}`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText12, 10, 64, {
+              align: 'left',
+            });
+
+            const hearderText13 = `${invoice.orderDetails?.address}`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText13, 10, 69, {
+              align: 'left',
+            });
+
+            const hearderText14 = `${invoice.orderDetails?.company_phone}`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText14, 10, 74, {
+              align: 'left',
+            });
+
+            const hearderText15 = `${text.txt_ship_to_in}:`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText15, 110, 59, {
+              align: 'left',
+            });
+
+            const hearderText16 = `${invoice.orderDetails?.location_name}`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText16, 110, 64, {
+              align: 'left',
+            });
+
+            const hearderText17 = `${invoice.orderDetails?.location_address}`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText17, 110, 69, {
+              align: 'left',
+            });
+
+            const hearderText18 = `${text.txt_attn_in}: ${invoice.orderDetails?.company_name}`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText18, 110, 74, {
+              align: 'left',
+            });
+
+            doc.line(10, 78, 200, 78);
+
+            const hearderText19 = `${text.txt_ordered_date_in}`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText19, 115, 82, {
+              align: 'left',
+            });
+
+            const hearderText20 = `${text.txt_ship_date_in}`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText20, 145, 82, {
+              align: 'left',
+            });
+
+            const hearderText21 = `${text.txt_terms_in}`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText21, 180, 82, {
+              align: 'left',
+            });
+
+            const hearderText22 = `${formatDateWithSpaces(
+              invoice.orderDetails?.order_date,
+            )}`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText22, 115, 87, {
+              align: 'left',
+            });
+
+            const hearderText23 = `${formatDateWithSpaces(
+              invoice.orderDetails?.ship_date,
+            )}`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText23, 145, 87, {
+              align: 'left',
+            });
+
+            const hearderText24 = `${text.txt_regular_in}`;
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(0, 0, 0);
+            doc.text(hearderText24, 180, 87, {
+              align: 'left',
+            });
+            doc.line(10, 92, 200, 92);
+
+          // }
         }
 
         const pdfOutput = doc.output('bloburi');
@@ -323,7 +536,7 @@ export default function PrintInvoice({ invoice }: { invoice: any }) {
         setPdfOutput(pdfOutput);
         setGenerating(false);
       },
-      margin: [10, 0, 35, 0],
+      margin: [94, 0, 35, 0],
       html2canvas: {
         scale: 0.265,
       },

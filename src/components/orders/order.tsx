@@ -9,31 +9,28 @@ type IProps = {
   order: any[] | undefined;
 };
 
-const Order = ({
-  order
-}: IProps) => {
+const Order = ({ order }: IProps) => {
   const router = useRouter();
   const { t } = useTranslation();
   const { alignLeft, alignRight } = useIsRTL();
 
-
   let columns = [
     {
-      title: "ID",
+      title: 'ID',
       dataIndex: 'id',
       key: 'id',
       align: alignLeft as AlignType,
-      width: 130,
+      width: 60,
       className: 'cursor-pointer',
     },
 
     {
-      title: "Location",
+      title: 'Location',
       className: 'cursor-pointer',
       dataIndex: 'location',
       key: 'location',
       align: 'center' as AlignType,
-      width: 180,
+      width: 100,
       render: (location: any) => (
         <div className="flex items-center font-medium justify-center">
           <span className="truncate text-center">
@@ -44,12 +41,12 @@ const Order = ({
     },
 
     {
-      title: "Chef",
+      title: 'Chef',
       className: 'cursor-pointer',
       dataIndex: 'chef',
       key: 'chef',
       align: 'center' as AlignType,
-      width: 180,
+      width: 100,
       render: (chef: any) => (
         <div className="flex items-center font-medium justify-center">
           <span className="truncate text-center">
@@ -60,12 +57,12 @@ const Order = ({
     },
 
     {
-      title: "Order date",
+      title: 'Order date',
       className: 'cursor-pointer',
       dataIndex: 'datum',
       key: 'datum',
       align: 'center' as AlignType,
-      width: 180,
+      width: 100,
       render: (datum: any) => (
         <div className="flex items-center font-medium justify-center">
           <span className="truncate text-center">
@@ -75,56 +72,57 @@ const Order = ({
       ),
     },
     {
-      title: "Number of products",
+      title: 'Number of products',
       className: 'cursor-pointer',
       dataIndex: 'br_proizvoda',
       key: 'br_proizvoda',
       align: 'center' as AlignType,
-      width: 180,
+      width: 130,
     },
     {
-      title: "Materials",
+      title: 'Materials',
       className: 'cursor-pointer',
       dataIndex: 'order_price',
       key: 'order_price',
       align: 'center' as AlignType,
-      width: 180,
-      render: (order_price: any) => (
-        <div className="flex items-center font-medium justify-center">
-          <span className="truncate text-center">
-            $ {order_price}
-          </span>
-        </div>
-      ),
+      width: 100,
+      render: function Render(ukupna_cena: any, record: any) {
+        return (
+          <div className="flex items-center font-medium justify-end">
+            <span className="truncate text-end">
+              ${' '}
+              {(
+                Number(record.ukupna_cena) + Number(record.order_price)
+              ).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </span>
+          </div>
+        );
+      },
     },
-    // {
-    //   title: "Delivery charge",
-    //   className: 'cursor-pointer',
-    //   dataIndex: 'sum_price',
-    //   key: 'sum_price',
-    //   align: 'center' as AlignType,
-    //   width: 180,
-    //   render: (sum_price: any) => (
-    //     <div className="flex items-center font-medium justify-center">
-    //       <span className="truncate text-center">
-    //         $ {sum_price}
-    //       </span>
-    //     </div>
-    //   ),
-    // },
     {
-      title: "Sum price",
+      title: 'Sum price',
       className: 'cursor-pointer',
       dataIndex: 'ukupna_cena',
       key: 'ukupna_cena',
       align: 'center' as AlignType,
-      width: 180,
-      render: function Render(ukupna_cena:any, record: any) {
-        return <div className="flex items-center font-medium justify-center">
-           <span className="truncate text-center">
-             $ {(Number(record.ukupna_cena) + Number(record.order_price)).toFixed(2)}
-           </span>
-         </div>
+      width: 100,
+      render: function Render(ukupna_cena: any, record: any) {
+        return (
+          <div className="flex items-center font-medium justify-end">
+            <span className="truncate text-end">
+              ${' '}
+              {(
+                Number(record.ukupna_cena) + Number(record.order_price)
+              ).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </span>
+          </div>
+        );
       },
     },
   ];
@@ -135,9 +133,9 @@ const Order = ({
         <Table
           columns={columns}
           emptyText={() => (
-            <div className="flex flex-col items-center py-7">
+            <div className="flex flex-col items-center py-4">
               <NoDataFound className="w-52" />
-              <div className="mb-1 pt-6 text-base font-semibold text-heading">
+              <div className="mb-1 pt-4 text-base font-semibold text-heading">
                 {t('table:empty-table-data')}
               </div>
               <p className="text-[13px]">{t('table:empty-table-sorry-text')}</p>
@@ -145,7 +143,7 @@ const Order = ({
           )}
           data={[order]}
           rowKey="id"
-          scroll={{ x: 1000 }}
+          scroll={{ x: 10 }}
         />
       </div>
     </>

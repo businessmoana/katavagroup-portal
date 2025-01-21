@@ -158,7 +158,6 @@ const UpdateOrCreateSalesView = () => {
                   </div>
                   <button
                     onClick={() => {
-                      console.log(getValues()['saleItems'][index]);
                       if (getValues()['saleItems'][index].id) {
                         handleDeactiveSaleItem(
                           getValues()['saleItems'][index].id,

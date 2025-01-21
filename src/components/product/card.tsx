@@ -1,11 +1,7 @@
-import Image from 'next/image';
-import usePrice from '@/utils/use-price';
 import { productPlaceholder } from '@/utils/placeholders';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { AddToCart } from '@/components/cart/add-to-cart/add-to-cart';
 import { useTranslation } from 'next-i18next';
-import { PlusIcon } from '@/components/icons/plus-icon';
-import { Product, ProductType } from '@/types';
 
 interface Props {
   item: any;
@@ -18,13 +14,13 @@ const ProductCard = ({ item }: Props) => {
   const { openModal } = useModalAction();
 
   function handleVariableProduct() {
-    return openModal('SELECT_PRODUCT_VARIATION', id);
+    return openModal('SELECT_PRODUCT_VARIATION', item,);
   }
 
   return (
     <div className="cart-type-neon h-full overflow-hidden rounded border border-border-200 bg-light shadow-sm transition-all duration-200 hover:shadow-md">
       <div
-        className="relative flex h-48 w-auto cursor-pointer items-center justify-center sm:h-64"
+        className="relative flex w-auto cursor-pointer items-center justify-center h-40"
         onClick={handleVariableProduct}
       >
         <img
@@ -34,7 +30,7 @@ const ProductCard = ({ item }: Props) => {
               : productPlaceholder
           }
           alt={item_name}
-          className="product-image h-full"
+          className="product-image h-full w-auto"
         />
       </div>
 

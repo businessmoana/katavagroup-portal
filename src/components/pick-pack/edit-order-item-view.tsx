@@ -24,7 +24,6 @@ const EditOrderItemView = () => {
   const handleForm = async(input: any) => {
     input['orderId']= data.orders_id
     input['orderItemId']= data.id
-    console.log("Data:", input)
 
     const result = await productClient.updateOrderItem(input);
     if (result) {

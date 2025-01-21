@@ -13,7 +13,7 @@ export const API_ENDPOINTS = {
   TAXES: 'taxes',
   SHIPPINGS: 'shippings',
   SETTINGS: 'settings',
-  CATEGORIES: 'categories',
+  // CATEGORIES: 'categories',
   TAGS: 'tags',
   TYPES: 'types',
   PROFILE_UPDATE: 'profile-update',
@@ -125,5 +125,6 @@ export const API_ENDPOINTS = {
   STATEMENTS: 'portal/statements',
   PRINTINVOICE:'print-invoice',
   PRINTCHEFSTATEMENT:'print-chef-statement',
-
+  CATEGORIES:'portal/categories',
+  GET_LOCATIONS:'portal/getLocations'
 };

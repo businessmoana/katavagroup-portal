@@ -12,6 +12,7 @@ import { SUPER_ADMIN } from '@/utils/constants';
 import ActionButtons from '../common/action-buttons';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
+import Button from '../ui/button';
 
 type IProps = {
   orders: any[] | undefined;
@@ -75,7 +76,7 @@ const OrdersList = ({
       dataIndex: 'id',
       key: 'id',
       align: alignLeft as AlignType,
-      width: 130,
+      width: 100,
       className: 'cursor-pointer',
       onHeaderCell: () => onHeaderClick('id'),
     },
@@ -95,7 +96,7 @@ const OrdersList = ({
       dataIndex: 'location',
       key: 'location',
       align: 'center' as AlignType,
-      width: 180,
+      width: 130,
       onHeaderCell: () => onHeaderClick('location_name'),
       render: (location: any) => (
         <div className="flex items-center font-medium">
@@ -121,7 +122,7 @@ const OrdersList = ({
       dataIndex: 'chef',
       key: 'chef',
       align: 'center' as AlignType,
-      width: 180,
+      width: 150,
       onHeaderCell: () => onHeaderClick('first_name'),
       render: (chef: any) => (
         <div className="flex items-center font-medium">
@@ -159,7 +160,7 @@ const OrdersList = ({
     {
       title: (
         <TitleWithSort
-          title={'Number of products'}
+          title={'Products Number'}
           ascending={
             sortingObj.sort === SortOrder.Asc &&
             sortingObj.column === 'br_proizvoda'
@@ -171,8 +172,17 @@ const OrdersList = ({
       dataIndex: 'br_proizvoda',
       key: 'br_proizvoda',
       align: 'center' as AlignType,
-      width: 180,
+      width: 100,
       onHeaderCell: () => onHeaderClick('br_proizvoda'),
+      render: function Render(ukupna_cena: any, record: any) {
+        return (
+          <div className="flex items-center font-medium justify-center">
+            <span className="truncate text-center">
+              {record.br_proizvoda}
+            </span>
+          </div>
+        );
+      },
     },
     {
       title: (
@@ -189,7 +199,7 @@ const OrdersList = ({
       dataIndex: 'ukupna_cena',
       key: 'ukupna_cena',
       align: 'center' as AlignType,
-      width: 180,
+      width: 150,
       onHeaderCell: () => onHeaderClick('ukupna_cena'),
       render: function Render(ukupna_cena: any, record: any) {
         return (
@@ -197,7 +207,10 @@ const OrdersList = ({
             <span className="truncate text-center">
               {(
                 Number(record.ukupna_cena) + Number(record.order_price)
-              ).toFixed(2)}
+              ).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
             </span>
           </div>
         );
@@ -209,10 +222,16 @@ const OrdersList = ({
       dataIndex: 'id',
       key: 'Actions',
       align: 'center' as AlignType,
-      width: 180,
+      width: 100,
       render: (id: string, { status }: Chef) => {
         return (
-          <ActionButtons id={id} detailsUrl={`${router.asPath}/${id}/view`} />
+          <a
+            href={`${router.asPath}/${id}/view`}
+            className="w-full h-12 flex justify-center items-center"
+            // target="_blank"
+          >
+            <Button>View</Button>
+          </a>
         );
       },
     },
@@ -242,7 +261,7 @@ const OrdersList = ({
           )}
           data={orders}
           rowKey="id"
-          scroll={{ x: 1000 }}
+          scroll={{ x: 10 }}
         />
       </div>
 

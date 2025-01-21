@@ -506,7 +506,7 @@ group
 }
 
 .rc-table thead.rc-table-thead th {
-  @apply px-3 py-3 text-sm font-semibold whitespace-nowrap bg-gray-50 font-body text-heading first:rounded-tl first:rounded-bl first:ps-5 last:rounded-tr last:rounded-br last:pe-5;
+  @apply px-3 py-3 text-sm font-semibold whitespace-nowrap bg-gray-300 font-body text-heading first:rounded-tl first:rounded-bl first:ps-5 last:rounded-tr last:rounded-br last:pe-5;
 }
 
 .rc-table tr.rc-table-row:hover {
@@ -514,7 +514,7 @@ group
 }
 
 .rc-table tr.rc-table-row td {
-  @apply px-3 py-4 text-sm font-normal cursor-default font-body text-body first:ps-5 last:pe-5;
+  @apply px-3 py-4 text-sm font-normal cursor-default font-body text-body first:ps-3 last:pe-3;
 }
 .rc-table tr.rc-table-row td.rc-table-cell-row-hover {
   @apply bg-gray-100;
@@ -914,7 +914,7 @@ input[type='number'].number-disable::-webkit-inner-spin-button {
 } */
 
 .flash-sale-table.rc-table thead.rc-table-thead th {
-  @apply bg-[#F9F9F9] text-sm font-normal text-[#666];
+  @apply bg-[#7c7b7b] text-sm font-normal text-[#666];
 }
 .flash-sale-table.rc-table thead.rc-table-thead th,
 .flash-sale-table.rc-table tr.rc-table-row td {

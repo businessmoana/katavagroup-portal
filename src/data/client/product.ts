@@ -19,6 +19,9 @@ export const productClient = {
       ...params,
     });
   },
+  getLocations: () =>
+    HttpClient.get<any>(API_ENDPOINTS.GET_LOCATIONS),
+
   getProduct(id:number) {
     return HttpClient.get<any>(`${API_ENDPOINTS.PRODUCTS}/${id}`);
   },

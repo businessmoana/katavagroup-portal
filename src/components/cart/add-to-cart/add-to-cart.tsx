@@ -59,8 +59,6 @@ export const AddToCart = ({
         value={getItemFromCart(item.id).quantity}
         onDecrement={handleRemoveClick}
         onIncrement={(e) => {
-          console.log('here add');
-          
           handleAddClick(e)
         }}
         variant={counterVariant || variant}

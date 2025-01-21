@@ -170,7 +170,7 @@ const InvoiceList = ({
       render: (ship_date: any) => (
         <div className="flex items-center font-medium">
           <span className="truncate text-left">
-            {dayjs(ship_date).format('MM/DD/YYYY HH:mm')}
+            {ship_date?dayjs(ship_date).format('MM/DD/YYYY HH:mm'):""}
           </span>
         </div>
       ),
@@ -182,20 +182,19 @@ const InvoiceList = ({
       key: 'Actions',
       align: 'center' as AlignType,
       width: 180,
-      render: (id: string, { status }: Chef) => {
+      render: (id: string, record:any) => {
         return (
           <a
             href={`/print/print-invoice/${id}`}
             className="w-full h-12 md:w-auto md:ms-6"
             target="_blank"
           >
-            <Button>View</Button>
+            <Button disabled={record.flag_approved == 0?false:true}>View</Button>
           </a>
         );
       },
     },
   ];
-console.log("isAdmin=>",isAdmin)
   return (
     <>
       <div className="mb-6 overflow-hidden rounded shadow">
@@ -212,7 +211,7 @@ console.log("isAdmin=>",isAdmin)
           )}
           data={invoices}
           rowKey="id"
-          scroll={{ x: 1000 }}
+          scroll={{ x: 10 }}
         />
       </div>
 

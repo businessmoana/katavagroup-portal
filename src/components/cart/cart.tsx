@@ -23,22 +23,13 @@ const Cart = () => {
   const router = useRouter();
 
   const handleCheckout = async () => {
-    console.log('Items=>', items);
-    console.log('totalPrice=>', total);
     let data = {
+      locationId:localStorage.getItem('locationId'),
       items: items,
       totalPrice: total,
     };
     const result = await orderClient.create(data);
-    console.log(result);
     if (result) resetCart();
-    // const regularCheckout = items.find((item) => item.is_digital === false);
-    // if (regularCheckout) {
-    // router.push(Routes.checkout);
-    // } else {
-    // router.push(ROUTES.CHECKOUT_DIGITAL);
-    // }
-    // closeSidebar({ display: false, view: '' });
   };
 
   return (
@@ -72,7 +63,7 @@ const Cart = () => {
           >
             <EmptyCartIcon width={140} height={176} />
             <h4 className="mt-6 text-base font-semibold">
-              {t('text-no-products')}
+              No products added to cart
             </h4>
           </motion.div>
         )}
@@ -81,8 +72,9 @@ const Cart = () => {
 
       <footer className="fixed bottom-0 z-10 w-full max-w-md bg-light px-6 py-5">
         <button
-          className="shadow-700 flex h-12 w-full justify-between rounded-full bg-accent p-1 text-sm font-bold transition-colors hover:bg-accent-hover focus:bg-accent-hover focus:outline-none md:h-14"
+          className={`shadow-700 flex h-12 w-full justify-between rounded-full  p-1 text-sm font-bold ${items.length > 0 ? "transition-colors bg-accent hover:bg-accent-hover focus:bg-accent-hover focus:outline-none" :"grey bg-gray-600"}   md:h-14`}
           onClick={handleCheckout}
+          disabled={items.length > 0?false:true}
         >
           <span className="flex h-full flex-1 items-center px-5 text-light">
             Place the order

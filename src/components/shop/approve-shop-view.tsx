@@ -41,7 +41,6 @@ const ApproveShopView = () => {
       via: 'admin',
     });
   }, []);
-console.log('data',data);
   return data?.multiCommission ? (
     <MultiCommission
       data={data}

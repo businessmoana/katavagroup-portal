@@ -55,12 +55,7 @@ export default function CategoryTypeFilter({
 
   const { types, loading } = useTypesQuery({ language: locale });
   const { yearOptions } = useGetDateIntervalsQuery();
-  const { categories, loading: categoryLoading } = useCategoriesQuery({
-    limit: 999,
-    language: locale,
-    type,
-  });
-
+  const { categories, loading: categoryLoading } = useCategoriesQuery();
   const { authors, loading: authorLoading } = useAuthorsQuery({
     limit: 999,
     language: locale,
@@ -122,8 +117,8 @@ export default function CategoryTypeFilter({
           <Label>{t('common:filter-by-category')}</Label>
           <Select
             options={categories}
-            getOptionLabel={(option: any) => option.name}
-            getOptionValue={(option: any) => option.slug}
+            getOptionLabel={(option: any) => option.naziv}
+            getOptionValue={(option: any) => option.id}
             placeholder={t('common:filter-by-category-placeholder')}
             isLoading={categoryLoading}
             onChange={onCategoryFilter}

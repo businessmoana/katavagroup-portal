@@ -62,100 +62,6 @@ const Navbar = () => {
   const [isMaintenanceModeStart, setUnderMaintenanceStart] = useAtom(
     checkIsMaintenanceModeStart,
   );
-  const { width } = useWindowSize();
-  const { settings, loading } = useSettingsQuery({ language: locale! });
-
-  const {
-    data: shop,
-    isLoading: shopLoading,
-    error,
-  } = useShopQuery(
-    {
-      slug: query?.shop as string,
-    },
-    { enabled: Boolean(query?.shop) },
-  );
-
-  useEffect(() => {
-    if (
-      settings?.options?.maintenance?.start &&
-      settings?.options?.maintenance?.until &&
-      settings?.options?.isUnderMaintenance
-    ) {
-      const beforeDay = isBefore(
-        new Date(),
-        new Date(settings?.options?.maintenance?.start as string),
-      );
-      // Calculate maintenance start time
-      const maintenanceStartTime = new Date(
-        settings?.options?.maintenance?.start as string,
-      );
-      const maintenanceEndTime = new Date(
-        settings?.options?.maintenance?.until as string,
-      );
-      maintenanceStartTime.setMinutes(maintenanceStartTime.getMinutes());
-
-      // Check if the current time has passed the maintenance start time
-      const currentTime = new Date();
-      const checkIsMaintenanceStart =
-        currentTime >= maintenanceStartTime &&
-        currentTime < maintenanceEndTime &&
-        settings?.options?.isUnderMaintenance;
-      const checkIsMaintenance =
-        beforeDay && settings?.options?.isUnderMaintenance;
-      setUnderMaintenance(checkIsMaintenance as boolean);
-      setUnderMaintenanceStart(checkIsMaintenanceStart as boolean);
-    }
-  }, [
-    settings?.options?.maintenance?.start,
-    settings?.options?.maintenance?.until,
-    settings?.options?.isUnderMaintenance,
-  ]);
-
-  useEffect(() => {
-    if (
-      query?.shop &&
-      shop?.settings?.shopMaintenance?.start &&
-      shop?.settings?.shopMaintenance?.until &&
-      shop?.settings?.isShopUnderMaintenance
-    ) {
-      const beforeDay = isBefore(
-        new Date(),
-        new Date(shop?.settings?.shopMaintenance?.start as Date),
-      );
-      // Calculate maintenance start time
-      const maintenanceStartTime = new Date(
-        shop?.settings?.shopMaintenance?.start as Date,
-      );
-      const maintenanceEndTime = new Date(
-        shop?.settings?.shopMaintenance?.until as Date,
-      );
-      maintenanceStartTime.setMinutes(maintenanceStartTime.getMinutes());
-
-      // Check if the current time has passed the maintenance start time
-      const currentTime = new Date();
-      const checkIsMaintenanceStart =
-        currentTime >= maintenanceStartTime &&
-        currentTime < maintenanceEndTime &&
-        shop?.settings?.isShopUnderMaintenance;
-      const checkIsMaintenance =
-        beforeDay && shop?.settings?.isShopUnderMaintenance;
-      setUnderMaintenance(checkIsMaintenance as boolean);
-      setUnderMaintenanceStart(checkIsMaintenanceStart as boolean);
-    }
-  }, [
-    query?.shop,
-    shop?.settings?.shopMaintenance?.start,
-    shop?.settings?.shopMaintenance?.until,
-    shop?.settings?.isShopUnderMaintenance,
-  ]);
-
-  if (loading || shopLoading) {
-    return <Loader showText={false} />;
-  }
-
-  const { options } = settings!;
-
   function handleClick() {
     openModal('SEARCH_VIEW');
     setSearchModal(true);
@@ -163,40 +69,6 @@ const Navbar = () => {
 
   return (
     <header className="fixed top-0 z-40 w-full bg-white shadow">
-      {width >= RESPONSIVE_WIDTH && isMaintenanceMode ? (
-        <Alert
-          message={
-            (settings?.options?.isUnderMaintenance &&
-              `Site ${t('text-maintenance-mode-title')}`) ||
-            (shop?.settings?.isShopUnderMaintenance &&
-              `${shop?.name} ${t('text-maintenance-mode-title')}`)
-          }
-          variant="info"
-          className="sticky top-0 left-0 z-50"
-          childClassName="flex justify-center items-center w-full gap-4 font-bold"
-        >
-          <CountdownTimer
-            date={
-              (settings?.options?.isUnderMaintenance &&
-                new Date(options?.maintenance?.start)) ||
-              (shop?.settings?.isShopUnderMaintenance &&
-                new Date(shop?.settings?.shopMaintenance?.start as Date))
-            }
-            className="text-blue-600 [&>p]:bg-blue-200 [&>p]:p-2 [&>p]:text-xs [&>p]:text-blue-600"
-          />
-        </Alert>
-      ) : (
-        ''
-      )}
-      {width >= RESPONSIVE_WIDTH && isMaintenanceModeStart ? (
-        <Alert
-          message={t('text-maintenance-mode-start-title')}
-          className="py-[1.375rem]"
-          childClassName="text-center w-full font-bold"
-        />
-      ) : (
-        ''
-      )}
       <nav className="flex items-center px-5 md:px-8">
         <div className="relative flex w-full flex-1 items-center">
           <div className="flex items-center">
@@ -217,7 +89,7 @@ const Navbar = () => {
             <div
               className={cn(
                 'flex h-16 shrink-0 transition-[width] duration-300 me-4 lg:h-[76px] lg:border-solid lg:border-gray-200/80 lg:me-8 lg:border-e',
-                miniSidebar ? 'lg:w-[65px]' : 'lg:w-[257px]',
+                miniSidebar ? 'lg:w-[65px]' : 'lg:w-[230px]',
               )}
             >
               <Logo />
@@ -240,12 +112,6 @@ const Navbar = () => {
                 )}
               />
             </button>
-          </div>
-          <div
-            className="relative ml-auto mr-1.5 flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full border border-gray-200 bg-gray-50 py-4 text-gray-600 hover:border-transparent hover:border-gray-200 hover:bg-white hover:text-accent sm:mr-6 lg:hidden xl:hidden"
-            onClick={handleClick}
-          >
-            <SearchIcon className="h-4 w-4" />
           </div>
           <div className="relative hidden w-full max-w-[710px] py-4 me-6 lg:block 2xl:me-auto">
             <SearchBar />

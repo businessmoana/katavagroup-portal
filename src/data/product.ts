@@ -36,6 +36,22 @@ export const useProductsQuery = (
   };
 };
 
+export const useLocationsQuery = () =>{
+  const { data, error, isLoading } = useQuery<any, Error>(
+    [API_ENDPOINTS.CHEFS_GET_LOCATIONS],
+    () =>
+      productClient.getLocations(),
+    {
+      keepPreviousData: true,
+    }
+  );
+
+  return {
+    locations: data ?? [],
+    error,
+    loading: isLoading,
+  };
+}
 export const useDeleteOrderItemlMutation = () => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();

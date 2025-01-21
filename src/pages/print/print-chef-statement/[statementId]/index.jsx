@@ -13,7 +13,6 @@ export default function PrintChefStatementPage() {
 
   const getStatementDetail = async() =>{
     const result = await printClient.getChefStatement(query.statementId)
-    console.log(result)
     if(result)
       setInvoice(result);
   }

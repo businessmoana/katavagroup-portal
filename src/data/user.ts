@@ -19,7 +19,6 @@ import { mapPaginatorData } from '@/utils/data-mappers';
 import axios from 'axios';
 import { setEmailVerified } from '@/utils/auth-utils';
 import { type } from 'os';
-
 export const useMeQuery = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -63,10 +62,9 @@ export function useLogin() {
 export const useLogoutMutation = () => {
   const router = useRouter();
   const { t } = useTranslation();
-
   return useMutation(userClient.logout, {
     onSuccess: () => {
-      Cookies.remove(AUTH_CRED);
+      Cookies.remove(AUTH_CRED);  
       router.replace(Routes.login);
       toast.success(t('common:successfully-logout'), {
         toastId: 'logoutSuccess',

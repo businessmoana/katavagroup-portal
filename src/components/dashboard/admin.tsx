@@ -24,7 +24,6 @@ export default function Dashboard() {
   }, [common]);
   const getOrders = async () => {
     const result = await dashboardAdmin.analyticsOrders();
-    console.log(result);
     setOrders(result);
   };
   function handleSearch({ searchText }: { searchText: string }) {

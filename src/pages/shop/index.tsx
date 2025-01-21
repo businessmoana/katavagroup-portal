@@ -14,15 +14,18 @@ import Loader from '@/components/ui/loader/loader';
 import NotFound from '@/components/ui/not-found';
 import Pagination from '@/components/ui/pagination';
 import { useUI } from '@/contexts/ui.context';
-import { useProductsQuery } from '@/data/product';
+import { useProductsQuery, useLocationsQuery } from '@/data/product';
 import { Category, Product, ProductStatus, Type } from '@/types';
 import { adminOnly } from '@/utils/auth-utils';
 import cn from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PageHeading from '@/components/common/page-heading';
+import { useMeQuery } from '@/data/user';
+import Select from '@/components/ui/select/select';
+import { useCart } from '@/contexts/quick-cart/cart.context';
 
 export default function ProductsPage() {
   const { locale } = useRouter();
@@ -30,17 +33,31 @@ export default function ProductsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [category, setCategory] = useState('');
   const [page, setPage] = useState(1);
+  const [type, setType] = useState('');
+  const { data: userInfo } = useMeQuery();
+  const { locations } = useLocationsQuery();
   const [visible, setVisible] = useState(false);
   const { displayCartSidebar, closeCartSidebar } = useUI();
+  const [location, setLocation] = useState<any>(null);
+  const { items } = useCart();
+  useEffect(() => {
+    if (location) localStorage.setItem('locationId', location.id);
+  }, [location]);
+
+  useEffect(() => {
+    if (locations) setLocation(locations[0]);
+  }, [locations]);
+
   const toggleVisible = () => {
     setVisible((v) => !v);
   };
   const { data, loading, paginatorInfo, error } = useProductsQuery({
-    limit: 16,
+    limit: 18,
     language: locale,
     search: searchTerm,
     page,
     categories: category,
+    sifraId: userInfo.role == 1 ? location?.sif_price_group_id : null,
   });
 
   if (loading) return <Loader text={t('common:text-loading')} />;
@@ -55,19 +72,50 @@ export default function ProductsPage() {
     setPage(current);
   }
 
-  // const { products } = data;
+  function handleChangeLocation(current: any) {
+    setLocation(current);
+  }
   return (
     <>
       <Card className="mb-8 flex flex-col">
         <div className="flex w-full flex-col items-center md:flex-row">
-          <div className="mb-4 md:mb-0 md:w-1/4">
+          <div className="mb-4 md:mb-0 md:w-1/4 flex gap-5 justify-start items-center">
             <PageHeading title={t('form:input-label-create-order')} />
+            {userInfo.role == 1 && (
+              <Select
+                options={locations}
+                getOptionLabel={(option: any) => option.location_name}
+                getOptionValue={(option: any) => option}
+                onChange={handleChangeLocation}
+                value={location}
+                className="w-[200px]"
+                isDisabled={items.length > 0 ? true : false}
+              ></Select>
+            )}
           </div>
 
           <div className="flex w-full flex-col items-center ms-auto md:w-2/4">
             <Search
               onSearch={handleSearch}
               placeholderText={t('form:input-placeholder-search-name')}
+            />
+          </div>
+        </div>
+        <div
+          className={cn('flex w-full transition', {
+            'visible h-auto': true,
+            // 'invisible h-0': !visible,
+          })}
+        >
+          <div className="mt-5 flex w-full flex-col border-t border-gray-200 pt-5 md:mt-8 md:flex-row md:items-center md:pt-8">
+            <CategoryTypeFilter
+              type={type}
+              onCategoryFilter={(category: Category) => {
+                setCategory(category?.id);
+                setPage(1);
+              }}
+              className="w-full"
+              enableCategory
             />
           </div>
         </div>
