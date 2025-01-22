@@ -57,7 +57,7 @@ export default function ProductsPage() {
     search: searchTerm,
     page,
     categories: category,
-    sifraId: userInfo.role == 1 ? location?.sif_price_group_id : null,
+    sifraId: userInfo?.role == 1 ? location?.sif_price_group_id : null,
   });
 
   if (loading) return <Loader text={t('common:text-loading')} />;
